@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
 
@@ -19,14 +18,15 @@ const AdminTable = () => {
   const fetchUsers = async (page, perPage, search, sortBy, order) => {
     try {
       setPending(true);
-      const res = await axios.get(
+      const res = await fetch(
         "https://secure-insurance-be.vercel.app/api/users/list",
         {
           params: { page, limit: perPage, search, sortBy, order },
         }
-      );
-      setUsers(res.data.data);
-      setTotalRows(res.data.total);
+      ).then((res) => res.json())
+  
+      setUsers(res.data);
+      setTotalRows(res.total);
     } catch (err) {
       console.error(err);
     } finally {
@@ -55,12 +55,17 @@ const AdminTable = () => {
 
     if (confirm.isConfirmed) {
       try {
-        await axios.post(
+        const res = await fetch(
           "https://secure-insurance-be.vercel.app/api/users/delete",
           {
-            ids,
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ids }),
           }
         );
+        if (!res.ok) {
+          throw new Error(await res.text());
+        }
         setSelectedRows([]);
         fetchUsers(page, perPage, search, sortField, sortOrder);
 
