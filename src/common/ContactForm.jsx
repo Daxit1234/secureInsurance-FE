@@ -73,7 +73,6 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
       });
 
       const data = await response.json();
-
       if (!response.ok) {
         setError(`⚠️ ${data.message || "Something went wrong"}`);
         return;
