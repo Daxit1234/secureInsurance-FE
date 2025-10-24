@@ -15,6 +15,7 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
   const [age, setAge] = useState(null);
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [loading, setLoading] = useState(false); // 👈 for spinner
 
   const calculateAge = (dob) => {
     const birthDate = new Date(dob);
@@ -43,7 +44,6 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Only validate visible fields
     for (const field of fields) {
       if (!formData[field]) {
         setError("⚠️ Please fill in all required fields.");
@@ -57,6 +57,7 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
     }
 
     setError("");
+    setLoading(true);
 
     try {
       const response = await fetch("https://secure-insurance-be.vercel.app/api/users/add", {
@@ -82,6 +83,8 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
       setFormData({ fullName: "", dob: "", email: "", gender: "", contact: "" });
     } catch (err) {
       setError(`⚠️ ${err.message}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,9 +192,38 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
           <div className="col-span-2 flex justify-center mt-8">
             <button
               type="submit"
-              className="bg-[#0b3554] hover:bg-blue-900 text-white px-8 py-3 rounded-lg transition"
+              disabled={loading}
+              className={`flex items-center justify-center bg-[#0b3554] text-white px-8 py-3 rounded-lg transition ${
+                loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-900"
+              }`}
             >
-              Submit
+              {loading ? (
+                <>
+                  <svg
+                    className="animate-spin mr-2 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"
+                    ></path>
+                  </svg>
+                  Submitting...
+                </>
+              ) : (
+                "Submit"
+              )}
             </button>
           </div>
         </form>
