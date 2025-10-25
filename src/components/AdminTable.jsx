@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import moment from "moment";
+import axios from "axios";
 
 const AdminTable = () => {
   const [users, setUsers] = useState([]);
@@ -18,15 +19,15 @@ const AdminTable = () => {
   const fetchUsers = async (page, perPage, search, sortBy, order) => {
     try {
       setPending(true);
-      const res = await fetch(
+      const res = await axios(
         "https://secure-insurance-be.vercel.app/api/users/list",
         {
           params: { page, limit: perPage, search, sortBy, order },
         }
-      ).then((res) => res.json())
-  
-      setUsers(res.data);
-      setTotalRows(res.total);
+      );
+
+      setUsers(res?.data?.data);
+      setTotalRows(res?.data?.total);
     } catch (err) {
       console.error(err);
     } finally {
@@ -55,27 +56,25 @@ const AdminTable = () => {
 
     if (confirm.isConfirmed) {
       try {
-        const res = await fetch(
+        const res = await axios.post(
           "https://secure-insurance-be.vercel.app/api/users/delete",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ids }),
-          }
+          { ids },
+          { headers: { "Content-Type": "application/json" } }
         );
-        if (!res.ok) {
-          throw new Error(await res.text());
-        }
-        setSelectedRows([]);
-        fetchUsers(page, perPage, search, sortField, sortOrder);
+        if (res.status === 200) {
+          setSelectedRows([]);
+          fetchUsers(page, perPage, search, sortField, sortOrder);
 
-        Swal.fire(
-          "Deleted!",
-          ids.length > 1
-            ? "Selected users have been deleted successfully."
-            : "User deleted successfully.",
-          "success"
-        );
+          Swal.fire(
+            "Deleted!",
+            ids.length > 1
+              ? "Selected users have been deleted successfully."
+              : "User deleted successfully.",
+            "success"
+          );
+        } else {
+          Swal.fire("Error", "Failed to delete users.", "error");
+        }
       } catch (err) {
         console.error(err);
         Swal.fire("Error", "Failed to delete users.", "error");
