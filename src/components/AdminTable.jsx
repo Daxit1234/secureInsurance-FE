@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import moment from "moment";
 import axios from "axios";
+import { Trash2 } from "feather-icons-react";
 
 const AdminTable = () => {
   const [users, setUsers] = useState([]);
@@ -91,8 +92,8 @@ const AdminTable = () => {
       sortField: "name",
     },
     {
-      name: "DOB",
-      selector: (row) => moment(row.dob).format("DD-MM-YYYY"),
+      name: "Date of Birth",
+      selector: (row) => row.dob ? moment(row.dob).format("DD-MM-YYYY") : "-",
       sortable: true,
       sortField: "dob",
     },
@@ -103,7 +104,7 @@ const AdminTable = () => {
       sortField: "email",
     },
     { name: "Contact", selector: (row) => row.phoneNo || row.contact },
-    { name: "Gender", selector: (row) => row.gender },
+    { name: "Gender", selector: (row) => row.gender || '-' },
     {
       name: "InquiryDate",
       selector: (row) => moment(row.createdAt).format("DD-MM-YYYY"),
@@ -111,12 +112,12 @@ const AdminTable = () => {
     {
       name: "Action",
       cell: (row) => (
-        <button
-          onClick={() => handleDelete([row._id])} // pass array with single ID
-          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+        <div
+          onClick={() => handleDelete([row._id])}
+          className="cursor-pointer" // pass array with single ID
         >
-          Delete
-        </button>
+          <Trash2 size={20} color="red" />
+        </div>
       ),
     },
   ];
