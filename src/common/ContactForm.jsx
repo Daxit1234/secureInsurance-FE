@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"] }) => {
+const ContactForm = ({
+  fields = ["fullName", "dob", "email", "gender", "contact"],
+  gender,
+  members,
+}) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -22,7 +27,10 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
     const today = new Date();
     let userAge = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       userAge--;
     }
     setAge(userAge);
@@ -51,7 +59,10 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
       }
     }
 
-    if (fields.includes("contact") && formData.contact.replace(/\s/g, "").length !== 10) {
+    if (
+      fields.includes("contact") &&
+      formData.contact.replace(/\s/g, "").length !== 10
+    ) {
       setError("⚠️ Please enter a valid 10-digit contact number.");
       return;
     }
@@ -60,17 +71,22 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
     setLoading(true);
 
     try {
-      const response = await fetch("https://secure-insurance-be.vercel.app/api/users/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.fullName,
-          dob: formData.dob,
-          email: formData.email,
-          gender: formData.gender,
-          phoneNo: parseInt(formData.contact.replace(/\s/g, ""), 10),
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/users/add`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formData.fullName || "",
+            dob: formData.dob || "",
+            email: formData.email || "",
+            gender: formData.gender || gender || "",
+            insuranceType: location.pathname.split("/")[1],
+            members: members || [],
+            phoneNo: parseInt(formData.contact.replace(/\s/g, ""), 10),
+          }),
+        }
+      );
 
       const data = await response.json();
       if (!response.ok) {
@@ -79,7 +95,13 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
       }
 
       setShowPopup(true);
-      setFormData({ fullName: "", dob: "", email: "", gender: "", contact: "" });
+      setFormData({
+        fullName: "",
+        dob: "",
+        email: "",
+        gender: "",
+        contact: "",
+      });
     } catch (err) {
       setError(`⚠️ ${err.message}`);
     } finally {
@@ -95,10 +117,15 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
   return (
     <div>
       <div className="bg-white shadow-md rounded-xl p-8 text-left">
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+        >
           {fields.includes("fullName") && (
             <div>
-              <label className="block text-sm font-medium text-[#0b3554] mb-1">Full Name</label>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Full Name
+              </label>
               <input
                 type="text"
                 name="fullName"
@@ -112,7 +139,9 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
 
           {fields.includes("dob") && (
             <div className="relative">
-              <label className="block text-sm font-medium text-[#0b3554] mb-1">Date of Birth</label>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Date of Birth
+              </label>
               <input
                 type="date"
                 name="dob"
@@ -130,7 +159,9 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
 
           {fields.includes("email") && (
             <div>
-              <label className="block text-sm font-medium text-[#0b3554] mb-1">Email</label>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -144,7 +175,9 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
 
           {fields.includes("contact") && (
             <div>
-              <label className="block text-sm font-medium text-[#0b3554] mb-1">Contact Number</label>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Contact Number
+              </label>
               <input
                 type="text"
                 name="contact"
@@ -186,7 +219,11 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
             </div>
           )}
 
-          {error && <div className="col-span-2 text-center text-red-600 text-sm mt-2">{error}</div>}
+          {error && (
+            <div className="col-span-2 text-center text-red-600 text-sm mt-2">
+              {error}
+            </div>
+          )}
 
           <div className="col-span-2 flex justify-center mt-8">
             <button
@@ -231,7 +268,9 @@ const ContactForm = ({ fields = ["fullName", "dob", "email", "gender", "contact"
       {showPopup && (
         <div style={popupStyle}>
           <div style={popupContentStyle}>
-            <h2 className="text-2xl font-bold mb-2">Thank You for Connecting with Us!</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              Thank You for Connecting with Us!
+            </h2>
             <p className="mb-4">We will contact you as soon as possible.</p>
             <button
               onClick={closePopupAndNavigate}

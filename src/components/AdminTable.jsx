@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import moment from "moment";
 import axios from "axios";
+import { Tooltip } from "react-tooltip";
 import { Trash2 } from "feather-icons-react";
 
 const AdminTable = () => {
@@ -20,12 +21,9 @@ const AdminTable = () => {
   const fetchUsers = async (page, perPage, search, sortBy, order) => {
     try {
       setPending(true);
-      const res = await axios(
-        "https://secure-insurance-be.vercel.app/api/users/list",
-        {
-          params: { page, limit: perPage, search, sortBy, order },
-        }
-      );
+      const res = await axios(`${import.meta.env.VITE_API_URL}/users/list`, {
+        params: { page, limit: perPage, search, sortBy, order },
+      });
 
       setUsers(res?.data?.data);
       setTotalRows(res?.data?.total);
@@ -58,7 +56,7 @@ const AdminTable = () => {
     if (confirm.isConfirmed) {
       try {
         const res = await axios.post(
-          "https://secure-insurance-be.vercel.app/api/users/delete",
+          `${import.meta.env.VITE_API_URL}/users/delete`,
           { ids },
           { headers: { "Content-Type": "application/json" } }
         );
@@ -93,7 +91,7 @@ const AdminTable = () => {
     },
     {
       name: "Date of Birth",
-      selector: (row) => row.dob ? moment(row.dob).format("DD-MM-YYYY") : "-",
+      selector: (row) => (row.dob ? moment(row.dob).format("DD-MM-YYYY") : "-"),
       sortable: true,
       sortField: "dob",
     },
@@ -103,8 +101,43 @@ const AdminTable = () => {
       sortable: true,
       sortField: "email",
     },
-    { name: "Contact", selector: (row) => row.phoneNo || row.contact },
-    { name: "Gender", selector: (row) => row.gender || '-' },
+    { name: "Contact", selector: (row) => row.phoneNo },
+    { name: "Insurance Type", selector: (row) => row.insuranceType || "-" },
+    {
+      name: "Members",
+      cell: (row) => {
+        const members = row?.members || [];
+        if (members.length === 0) return "-";
+
+        const displayText =
+          members.length > 2
+            ? `${members.slice(0, 2).join(", ")} +${members.length - 2} more`
+            : members.join(", ");
+
+        return (
+          <>
+            <div
+              data-tooltip-id={`members-${row._id}`}
+              data-tooltip-content={members.join(", ")} // ✅ full list in tooltip
+              className="truncate max-w-[180px] cursor-pointer"
+            >
+              {displayText}
+            </div>
+            <Tooltip
+              id={`members-${row._id}`}
+              place="top"
+              style={{
+                backgroundColor: "#0b3554",
+                color: "white",
+                fontSize: "13px",
+              }}
+            />
+          </>
+        );
+      },
+    },
+
+    { name: "Gender", selector: (row) => row.gender || "-" },
     {
       name: "InquiryDate",
       selector: (row) => moment(row.createdAt).format("DD-MM-YYYY"),

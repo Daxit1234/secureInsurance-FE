@@ -1,5 +1,6 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -21,7 +22,12 @@ import RetirementPlans from "./components/RetirementPlans";
 import HomeLoan from "./components/HomeLoan";
 import PersonalLoan from "./components/PersonalLoan";
 import AdminTable from "./components/AdminTable";
+import AdminLogin from "./components/AdminLogin.jsx";
 
+function ProtectedRoute({ children }) {
+  const isAdmin = sessionStorage.getItem("admin");
+  return isAdmin ? children : <Navigate to="/adminLogin" />;
+}
 
 function App() {
   return (
@@ -34,22 +40,37 @@ function App() {
             <div className="App">
               <Header />
               <main>
-                <section id="home"><Hero /></section>
-                <section id="about"><About /></section>
-                <section id="services"><Services /></section>
-                <section id="contact"><Contact /></section>
+                <section id="home">
+                  <Hero />
+                </section>
+                <section id="about">
+                  <About />
+                </section>
+                <section id="services">
+                  <Services />
+                </section>
+                <section id="contact">
+                  <Contact />
+                </section>
               </main>
             </div>
           }
         />
-
         {/* Individual Pages */}
-        <Route path="/admin" element={<AdminTable />} />
-
+        <Route path="/adminLogin" element={<AdminLogin />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminTable />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/hero" element={<Hero />} />
         <Route path="/TermLife" element={<TermLife />} />
         <Route path="/HealthInsurance" element={<HealthInsurance />} />
-        <Route path="/Health" element={<Health />} /> {/* ✅ Added Health route */}
+        <Route path="/Health" element={<Health />} />{" "}
+        {/* ✅ Added Health route */}
         <Route path="/InvestmentPlans" element={<InvestmentPlans />} />
         <Route path="/CarInsurance" element={<CarInsurance />} />
         <Route path="/TwoWheeler" element={<TwoWheeler />} />
@@ -57,7 +78,10 @@ function App() {
         <Route path="/TravelInsurance" element={<TravelInsurance />} />
         <Route path="/MourgageLoan" element={<MourgageLoan />} />
         <Route path="/TermPlanwithReturns" element={<TermPlanwithReturns />} />
-        <Route path="/GuaranteedReturnPlans" element={<GuaranteedReturnPlans />} />
+        <Route
+          path="/GuaranteedReturnPlans"
+          element={<GuaranteedReturnPlans />}
+        />
         <Route path="/ChildSavingsPlans" element={<ChildSavingsPlans />} />
         <Route path="/RetirementPlans" element={<RetirementPlans />} />
         <Route path="/HomeLoan" element={<HomeLoan />} />

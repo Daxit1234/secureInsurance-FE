@@ -9,7 +9,8 @@ const FamilyHealth = () => {
   const [showMore, setShowMore] = useState(false);
 
   const memberImages = {
-    Self: gender === "Male" ? "/images/self-male.png" : "/images/self-female.png",
+    Self:
+      gender === "Male" ? "/images/self-male.png" : "/images/self-female.png",
     Wife: "/images/wife.png",
     Husband: "/images/husband.png",
     Son: "/images/son.png",
@@ -48,7 +49,9 @@ const FamilyHealth = () => {
 
   // ✅ Navigate to Health.jsx page
   const handleContinue = () => {
-    navigate("/health"); // assumes route "/health" is set in App.jsx
+    navigate(
+      "/health?gender=" + gender + "&members=" + selectedMembers.join(",")
+    );
   };
 
   return (
