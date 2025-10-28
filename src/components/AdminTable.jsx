@@ -187,7 +187,7 @@ const AdminTable = () => {
       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
-          placeholder="Search by name, email, inquiryTime..."
+          placeholder="Search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="border p-2 rounded w-1/3"
