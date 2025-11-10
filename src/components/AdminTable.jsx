@@ -52,7 +52,7 @@ const AdminTable = () => {
       setPending(true);
       const insuranceType = activeTab === "All" ? "" : activeTab;
       // const res = await axios(`${import.meta.env.VITE_API_URL}/users/list`, {
-      const res = await axios(`http://localhost:4000/api/users/list`, {
+      const res = await axios(`${import.meta.env.VITE_API_URL}/users/list`, {
         params: { page, limit: perPage, search, sortBy, order, insuranceType },
       });
 
@@ -211,7 +211,7 @@ const AdminTable = () => {
   };
 
   const exportClick = async () => {
-    const res = await axios(`http://localhost:4000/api/users/searchall`);
+    const res = await axios(`${import.meta.env.VITE_API_URL}/users/searchall`);
     generateExcel(res?.data?.data);
   };
 
