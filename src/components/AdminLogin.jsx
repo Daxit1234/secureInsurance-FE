@@ -1,3 +1,4 @@
+import { Loader } from "feather-icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -17,22 +18,27 @@ import {
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/admin/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-
-    if (res.ok) {
-      sessionStorage.setItem("admin", "true");
-      navigate("/admin");
-    } else {
-      alert("Invalid username or password");
+      if (res.ok) {
+        sessionStorage.setItem("admin", "true");
+        navigate("/inquiry");
+      } else {
+        alert("Invalid username or password");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,8 +75,8 @@ export default function AdminLogin() {
                   />
                 </FormGroup>
                 <Col className="text-center">
-                  <Button color="primary" block type="submit">
-                    Login
+                  <Button color="primary" block type="submit" disabled={loading}>
+                    {loading ? "Loading..." : "Login"}
                   </Button>
                 </Col>
               </Form>

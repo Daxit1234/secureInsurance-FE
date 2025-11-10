@@ -23,6 +23,8 @@ import HomeLoan from "./components/HomeLoan";
 import PersonalLoan from "./components/PersonalLoan";
 import AdminTable from "./components/AdminTable";
 import AdminLogin from "./components/AdminLogin.jsx";
+import CustomerInquiry from "./components/admin/CustomerInqury.jsx";
+import SystemSetup from "./components/admin/SystemSetup.jsx";
 
 function ProtectedRoute({ children }) {
   const isAdmin = sessionStorage.getItem("admin");
@@ -59,10 +61,18 @@ function App() {
         {/* Individual Pages */}
         <Route path="/adminLogin" element={<AdminLogin />} />
         <Route
-          path="/admin"
+          path="/inquiry"
           element={
             <ProtectedRoute>
-              <AdminTable />
+              <CustomerInquiry />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/system-setup"
+          element={
+            <ProtectedRoute>
+              <SystemSetup />
             </ProtectedRoute>
           }
         />
