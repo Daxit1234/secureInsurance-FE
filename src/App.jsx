@@ -1,6 +1,11 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -21,7 +26,7 @@ import ChildSavingsPlans from "./components/ChildSavingsPlans.jsx";
 import RetirementPlans from "./components/RetirementPlans";
 import HomeLoan from "./components/HomeLoan";
 import PersonalLoan from "./components/PersonalLoan";
-import AdminTable from "./components/AdminTable";
+import AdminTable from "./components/admin/AdminTable.jsx";
 import AdminLogin from "./components/AdminLogin.jsx";
 import CustomerInquiry from "./components/admin/CustomerInqury.jsx";
 import SystemSetup from "./components/admin/SystemSetup.jsx";
@@ -61,15 +66,15 @@ function App() {
         {/* Individual Pages */}
         <Route path="/adminLogin" element={<AdminLogin />} />
         <Route
-          path="/inquiry"
+          path="/admin/inquiry"
           element={
             <ProtectedRoute>
-              <CustomerInquiry />
+              <AdminTable />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/system-setup"
+          path="/admin/system-setup"
           element={
             <ProtectedRoute>
               <SystemSetup />

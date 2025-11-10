@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Nav, NavItem, NavLink, Button } from "reactstrap";
 import Sidebar from "./Sidebar";
 import { exportToExcel } from "../../helper";
-import AdminTable from "../AdminTable";
+import AdminTable from "./AdminTable";
 
 const insuranceTabs = [
   "All",
@@ -54,23 +54,6 @@ export default function CustomerInquiry() {
 
   const fetchUsers = async () => {};
 
-  const exportClick = () => {
-    generateExcel(data);
-  };
-
-  const generateExcel = (data) => {
-    let headerAry = [];
-    headerAry = ["name", "email", "phone", "members"];
-    const expData = data?.map((cDetails) => {
-      return {
-        ["name"]: cDetails?.name || "",
-        ["email"]: cDetails?.email || "",
-        ["phone"]: cDetails?.phone || "",
-        ["members"]: cDetails?.members.join(", ") || "",
-      };
-    });
-    exportToExcel(expData, "RouteMaster", headerAry);
-  };
   return (
     <>
       <AdminTable />

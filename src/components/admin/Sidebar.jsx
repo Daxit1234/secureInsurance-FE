@@ -6,8 +6,8 @@ export default function Sidebar() {
     const location = useLocation(); // Get current path
     // Map pathnames to menu keys
     const pathToKey = {
-        "/inquiry": "inquiry",
-        "/system-setup": "system-setup",
+        "/admin/system-setup": "inquiry",
+        "/admin/system-setup": "system-setup",
     };
 
     const currentKey = pathToKey[location.pathname] || "inquiry";
@@ -22,12 +22,12 @@ export default function Sidebar() {
             >
                 <h4 className="text-center mb-4">Admin Panel</h4>
                 <Menu.Item key="inquiry">
-                    <Link to="/inquiry" className="text-decoration-none">
+                    <Link to="/admin/inquiry" className="text-decoration-none">
                         <span>Customer Inquiry</span>
                     </Link>
                 </Menu.Item>
                 <Menu.Item key="system-setup">
-                    <Link to="/system-setup" className="text-decoration-none">
+                    <Link to="/admin/system-setup" className="text-decoration-none">
                         <span>System Setup</span>
                     </Link>
                 </Menu.Item>

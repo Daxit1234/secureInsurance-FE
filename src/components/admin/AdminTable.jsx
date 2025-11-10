@@ -5,8 +5,8 @@ import moment from "moment";
 import axios from "axios";
 import { Tooltip } from "react-tooltip";
 import { Trash2 } from "feather-icons-react";
-import Sidebar from "./admin/Sidebar";
-import { exportToExcel } from "../helper";
+import Sidebar from "./Sidebar";
+import { exportToExcel } from "../../helper";
 import { Nav, NavItem, NavLink, Button } from "reactstrap";
 
 const AdminTable = () => {
@@ -279,7 +279,7 @@ const AdminTable = () => {
         </Nav>
 
         {/* Search & Delete */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-3 mb-4 gap-3">
           <input
             type="text"
             placeholder="Search"
