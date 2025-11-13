@@ -64,7 +64,6 @@ export default function DynamicForm({ editId = null, setEditId, onSuccess }) {
     setLoading(true);
 
     try {
-      debugger;
       const details = { ...formData };
       if (listInputs?.benefits) details.benefits = listInputs.benefits;
       const uploadData = new FormData();

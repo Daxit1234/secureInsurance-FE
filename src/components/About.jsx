@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { filterSystemData } from "../helper";
 
 export default function About() {
+  const { systemData } = useSelector((state) => state.systemReducer);
+  const [aboutData, setAboutData] = useState([]);
+  useEffect(() => {
+    if (systemData.length > 0) {
+      const aboutUsData = filterSystemData(systemData, "about_us");
+      setAboutData(aboutUsData);
+    }
+  }, [systemData]);
   return (
     <div className="bg-[#fef9f6] py-20 px-8">
       <div className="max-w-6xl mx-auto">
@@ -22,26 +32,18 @@ export default function About() {
 
         {/* Bottom Images */}
         {/* Bottom Images */}
-{/* Bottom Images */}
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-  <img
-    src="https://images.pexels.com/photos/3184416/pexels-photo-3184416.jpeg?auto=compress&cs=tinysrgb&w=800"
-    alt="Team discussion"
-    className="rounded-xl shadow-md w-full h-[500px] object-cover"
-  />
-  <img
-    src="https://images.pexels.com/photos/3184296/pexels-photo-3184296.jpeg?auto=compress&cs=tinysrgb&w=800"
-    alt="Financial expert"
-    className="rounded-xl shadow-md w-full h-[500px] object-cover"
-  />
-  <img
-    src="https://images.pexels.com/photos/3184412/pexels-photo-3184412.jpeg?auto=compress&cs=tinysrgb&w=800"
-    alt="Business meeting"
-    className="rounded-xl shadow-md w-full h-[500px] object-cover"
-  />
-</div>
-
-
+        {/* Bottom Images */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {aboutData.map((item) => (
+            <>
+              <img
+                src={item?.imageUrl}
+                alt={item?.details?.title || ""}
+                className="rounded-xl shadow-md w-full h-[500px] object-cover"
+              />
+            </>
+          ))}
+        </div>
       </div>
     </div>
   );
