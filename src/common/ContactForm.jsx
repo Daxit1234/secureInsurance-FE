@@ -115,12 +115,13 @@ const ContactForm = ({
   };
 
   return (
-    <div>
-      <div className="bg-white shadow-md rounded-xl p-8 text-left">
+    <div className="md:px-8">
+      <div className="bg-white shadow-md rounded-xl p-6 md:p-8 text-left max-w-4xl mx-auto">
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
+          {/* Full Name */}
           {fields.includes("fullName") && (
             <div>
               <label className="block text-sm font-medium text-[#0b3554] mb-1">
@@ -131,12 +132,13 @@ const ContactForm = ({
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your name"
               />
             </div>
           )}
 
+          {/* DOB */}
           {fields.includes("dob") && (
             <div className="relative">
               <label className="block text-sm font-medium text-[#0b3554] mb-1">
@@ -147,16 +149,17 @@ const ContactForm = ({
                 name="dob"
                 value={formData.dob}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2 pr-16 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 rounded-lg p-3 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
               {age !== null && (
-                <div className="absolute right-2 top-[35px] bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-md">
+                <div className="absolute right-2 top-9 bg-blue-100 text-blue-800 text-xs md:text-sm font-medium px-2 py-1 rounded-md">
                   {age} years
                 </div>
               )}
             </div>
           )}
 
+          {/* Email */}
           {fields.includes("email") && (
             <div>
               <label className="block text-sm font-medium text-[#0b3554] mb-1">
@@ -167,12 +170,13 @@ const ContactForm = ({
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your email"
               />
             </div>
           )}
 
+          {/* Contact */}
           {fields.includes("contact") && (
             <div>
               <label className="block text-sm font-medium text-[#0b3554] mb-1">
@@ -183,16 +187,17 @@ const ContactForm = ({
                 name="contact"
                 value={formData.contact}
                 onChange={handleContactChange}
-                className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your contact number"
               />
             </div>
           )}
 
+          {/* Gender */}
           {fields.includes("gender") && (
-            <div className="col-span-2 flex justify-center mt-4">
+            <div className="col-span-1 md:col-span-2 flex flex-col items-start md:items-center">
+              <label className="text-[#0b3554] font-medium mb-2">Gender</label>
               <div className="flex items-center space-x-6">
-                <span className="text-[#0b3554] font-medium mr-2">Gender:</span>
                 <label className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -204,6 +209,7 @@ const ContactForm = ({
                   />
                   <span>Male</span>
                 </label>
+
                 <label className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -219,13 +225,15 @@ const ContactForm = ({
             </div>
           )}
 
+          {/* Error */}
           {error && (
-            <div className="col-span-2 text-center text-red-600 text-sm mt-2">
+            <div className="col-span-1 md:col-span-2 text-center text-red-600 text-sm">
               {error}
             </div>
           )}
 
-          <div className="col-span-2 flex justify-center mt-8">
+          {/* Submit */}
+          <div className="col-span-1 md:col-span-2 flex justify-center mt-4">
             <button
               type="submit"
               disabled={loading}
@@ -265,16 +273,17 @@ const ContactForm = ({
         </form>
       </div>
 
+      {/* Popup */}
       {showPopup && (
-        <div style={popupStyle}>
-          <div style={popupContentStyle}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50">
+          <div className="bg-white p-6 rounded-lg max-w-sm w-full text-center">
             <h2 className="text-2xl font-bold mb-2">
               Thank You for Connecting with Us!
             </h2>
             <p className="mb-4">We will contact you as soon as possible.</p>
             <button
               onClick={closePopupAndNavigate}
-              className="bg-[#0b3554] text-white px-6 py-2 rounded-lg hover:bg-blue-900 transition"
+              className="bg-[#0b3554] text-white px-6 py-2 rounded-lg hover:bg-blue-900 transition w-full"
             >
               Close
             </button>

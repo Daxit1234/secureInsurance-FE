@@ -24,11 +24,11 @@ const AdminTable = () => {
   const tabs = [
     { key: "All", value: "" },
     { key: "Term Life Insurance", value: "TermLife" },
-    { key: "Health Insurance", value: "HealthInsurance" },
+    { key: "Health Insurance", value: "Health" },
     { key: "Investment Plans", value: "InvestmentPlans" },
     { key: "Car Insurance", value: "CarInsurance" },
     { key: "2 Wheeler Insurance", value: "TwoWheeler" },
-    { key: "Family Health Insurance", value: "FamilyHealth" },
+    // { key: "Family Health Insurance", value: "FamilyHealth" },
     { key: "Travel Insurance", value: "TravelInsurance" },
     { key: "Mourgage Loan", value: "MourgageLoan" },
     { key: "Term Plan with Return", value: "TermPlanwithReturns" },

@@ -6,7 +6,7 @@ export default function Sidebar() {
     const location = useLocation(); // Get current path
     // Map pathnames to menu keys
     const pathToKey = {
-        "/admin/system-setup": "inquiry",
+        "/admin/inquiry": "inquiry",
         "/admin/system-setup": "system-setup",
     };
 
