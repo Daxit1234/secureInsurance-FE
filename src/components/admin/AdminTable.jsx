@@ -41,7 +41,7 @@ const AdminTable = () => {
     { key: "2 Wheeler Insurance", value: "TwoWheeler" },
     // { key: "Family Health Insurance", value: "FamilyHealth" },
     { key: "Travel Insurance", value: "TravelInsurance" },
-    { key: "Mourgage Loan", value: "MourgageLoan" },
+    { key: "Mortgage Loan", value: "MortgageLoan" },
     { key: "Term Plan with Return", value: "TermPlanwithReturns" },
     { key: "Guaranteed Return Plan", value: "GuaranteedReturnPlans" },
     { key: "Child Savings Plan", value: "ChildSavingsPlans" },

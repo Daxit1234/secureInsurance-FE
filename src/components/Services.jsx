@@ -29,7 +29,7 @@ export default function Services() {
     "Two Wheeler Insurance": "/TwoWheeler",
     "Family Health Insurance": "/FamilyHealth",
     "Travel Insurance": "/TravelInsurance",
-    "Mourgage Loan": "/MourgageLoan",
+    "Mortgage Loan": "/MortgageLoan",
     "Term Plan with Return": "/TermPlanwithReturns",
     "Guaranteed Return Plans": "/GuaranteedReturnPlans",
     "Child Savings Plans": "/ChildSavingsPlans",

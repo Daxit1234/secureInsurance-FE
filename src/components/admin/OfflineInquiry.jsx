@@ -8,7 +8,7 @@ const tabs = [
   { key: "Car Insurance", value: "CarInsurance" },
   { key: "2 Wheeler Insurance", value: "TwoWheeler" },
   { key: "Travel Insurance", value: "TravelInsurance" },
-  { key: "Mourgage Loan", value: "MourgageLoan" },
+  { key: "Mortgage Loan", value: "MortgageLoan" },
   { key: "Term Plan with Return", value: "TermPlanwithReturns" },
   { key: "Guaranteed Return Plan", value: "GuaranteedReturnPlans" },
   { key: "Child Savings Plan", value: "ChildSavingsPlans" },

@@ -99,7 +99,7 @@ function App() {
           <Route path="/TwoWheeler" element={<TwoWheeler />} />
           <Route path="/FamilyHealth" element={<FamilyHealth />} />
           <Route path="/TravelInsurance" element={<TravelInsurance />} />
-          <Route path="/MourgageLoan" element={<MourgageLoan />} />
+          <Route path="/MortgageLoan" element={<MourgageLoan />} />
           <Route
             path="/TermPlanwithReturns"
             element={<TermPlanwithReturns />}
