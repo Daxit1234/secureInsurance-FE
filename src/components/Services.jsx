@@ -4,16 +4,23 @@ import PartnersSection from "./PartnersSection.jsx";
 import { useSelector } from "react-redux";
 import { filterSystemData } from "../helper/index.jsx";
 import About from "./About.jsx";
+import { useNavigate } from "react-router-dom";
 
 // At the bottom of your JSX return:
 <PartnersSection />;
 
+const navigateUrl = {
+  "Life Insurance": "/TermLife",
+  "Health Insurance": "/HealthInsurance",
+  "Home Insurance": "/HomeLoan",
+};
 export default function Services() {
   const { systemData } = useSelector((state) => state.systemReducer);
   const [serviceList, setServiceList] = useState([]);
   const [insurancePlan, setInsurancePlane] = useState([]);
   const [investmentPlan, setInvestmentPlan] = useState([]);
   const [financialPlan, setFinancialPlan] = useState([]);
+  const navigate = useNavigate();
   const services = {
     "Term Life Insurance": "/TermLife",
     "Health Insurance": "/HealthInsurance",
@@ -105,7 +112,10 @@ export default function Services() {
           protection needs.
         </p>
         {insurancePlan.map((item) => (
-          <div className="max-w-5xl mx-auto mt-16 bg-[#eaf4fa] rounded-2xl shadow-md border border-gray-200 flex flex-col md:flex-row overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+          <div
+            onClick={() => navigate(navigateUrl[item?.details?.title])}
+            className="max-w-5xl mx-auto mt-16 bg-[#eaf4fa] rounded-2xl shadow-md border border-gray-200 flex flex-col md:flex-row overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+          >
             <div className="md:w-1/2 w-full overflow-hidden">
               <img
                 src={item?.imageUrl}
