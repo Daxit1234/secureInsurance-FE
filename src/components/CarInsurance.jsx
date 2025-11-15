@@ -16,7 +16,7 @@ export default function CarInsurance() {
           damages.
         </p>
 
-       <ContactForm fields={['fullName','contact','email']}  />
+       <ContactForm fields={['fullName','contact','email',"vehicleNo"]}  />
       </div>
     </div>
   );

@@ -15,6 +15,10 @@ const ContactForm = ({
     email: "",
     gender: "",
     contact: "",
+    vehicleNo: "",
+    panNo: "",
+    aadharNo: "",
+    loanAmount: "",
   });
 
   const [age, setAge] = useState(null);
@@ -66,6 +70,13 @@ const ContactForm = ({
       setError("⚠️ Please enter a valid 10-digit contact number.");
       return;
     }
+    if (
+      fields.includes("aadharNo") &&
+      formData.aadharNo.length !== 12
+    ) {
+      setError("⚠️ Please enter a valid 1Aadhaar number.");
+      return;
+    }
 
     setError("");
     setLoading(true);
@@ -81,6 +92,10 @@ const ContactForm = ({
             dob: formData.dob || "",
             email: formData.email || "",
             gender: formData.gender || gender || "",
+            vehicleNo: formData.vehicleNo || "",
+            loanAmount: formData.loanAmount || "",
+            panNo: formData.panNo || "",
+            aadharNo: formData.aadharNo || "",
             insuranceType: location.pathname.split("/")[1],
             members: members || [],
             phoneNo: parseInt(formData.contact.replace(/\s/g, ""), 10),
@@ -189,6 +204,66 @@ const ContactForm = ({
                 onChange={handleContactChange}
                 className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Enter your contact number"
+              />
+            </div>
+          )}
+          {fields.includes("vehicleNo") && (
+            <div>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Vehicle Number
+              </label>
+              <input
+                type="text"
+                name="vehicleNo"
+                value={formData.vehicleNo}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Enter your vehicle number"
+              />
+            </div>
+          )}
+          {fields.includes("panNo") && (
+            <div>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Pan Card Number
+              </label>
+              <input
+                type="text"
+                name="panNo"
+                value={formData.panNo}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Enter your panCard number"
+              />
+            </div>
+          )}
+          {fields.includes("aadharNo") && (
+            <div>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Aadhaar Number
+              </label>
+              <input
+                type="number"
+                name="aadharNo"
+                value={formData.aadharNo}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Enter your Aadhaar number"
+              />
+            </div>
+          )}
+          {fields.includes("loanAmount") && (
+            <div>
+              <label className="block text-sm font-medium text-[#0b3554] mb-1">
+                Loan Amount
+              </label>
+              <input
+                type="number"
+                name="loanAmount"
+                value={formData.loanAmount}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Enter loan Amount"
               />
             </div>
           )}

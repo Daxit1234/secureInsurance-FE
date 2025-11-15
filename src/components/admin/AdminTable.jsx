@@ -113,78 +113,152 @@ const AdminTable = () => {
   };
 
   // Columns
-  const columns = [
-    {
-      name: "Name",
-      selector: (row) => row.name,
-      sortable: true,
-      sortField: "name",
-    },
-    {
-      name: "Date of Birth",
-      selector: (row) => (row.dob ? moment(row.dob).format("DD-MM-YYYY") : "-"),
-      sortable: true,
-      sortField: "dob",
-    },
-    {
-      name: "Email",
-      selector: (row) => row.email,
-      sortable: true,
-      sortField: "email",
-    },
-    { name: "Contact", selector: (row) => row.phoneNo },
-    { name: "Insurance Type", selector: (row) => row.insuranceType || "-" },
-    {
-      name: "Members",
-      cell: (row) => {
-        const members = row?.members || [];
-        if (members.length === 0) return "-";
-
-        const displayText =
-          members.length > 2
-            ? `${members.slice(0, 2).join(", ")} +${members.length - 2} more`
-            : members.join(", ");
-
-        return (
-          <>
-            <div
-              data-tooltip-id={`members-${row._id}`}
-              data-tooltip-content={members.join(", ")} // ✅ full list in tooltip
-              className="truncate max-w-[180px] cursor-pointer"
-            >
-              {displayText}
-            </div>
-            <Tooltip
-              id={`members-${row._id}`}
-              place="top"
-              style={{
-                backgroundColor: "#0b3554",
-                color: "white",
-                fontSize: "13px",
-              }}
-            />
-          </>
-        );
+  const getColumns = (type) => {
+    const baseColumns = [
+      {
+        name: "Name",
+        selector: (row) => row.name,
+        sortable: true,
+        sortField: "name",
       },
-    },
+      {
+        name: "Date of Birth",
+        selector: (row) =>
+          row.dob ? moment(row.dob).format("DD-MM-YYYY") : "-",
+        sortable: true,
+        sortField: "dob",
+      },
+      {
+        name: "Email",
+        selector: (row) => row.email,
+        sortable: true,
+        sortField: "email",
+      },
+      { name: "Contact", selector: (row) => row.phoneNo },
+      { name: "Insurance Type", selector: (row) => row.insuranceType || "-" },
+    ];
 
-    { name: "Gender", selector: (row) => row.gender || "-" },
-    {
+    // ➕ Add conditional columns
+    if (type === "CarInsurance" || type === "TwoWheeler" || type === "") {
+      baseColumns.push({
+        name: "Vehicle No",
+        selector: (row) => row.vehicleNo || "-",
+      });
+    }
+
+    if (type === "HomeLoan" || type === "") {
+      baseColumns.push({
+        name: "amount",
+        selector: (row) => row.loanAmount || "-",
+      });
+    }
+    if (type === "PersonalLoan" || type === "") {
+      baseColumns.push({
+        name: "PanCard Number",
+        selector: (row) => {
+          return (
+            <>
+              <div
+                data-tooltip-id={`members-${row._id}`}
+                data-tooltip-content={row?.panNo} // ✅ full list in tooltip
+                className="truncate max-w-[180px] cursor-pointer"
+              >
+                {row?.panNo}
+              </div>
+              <Tooltip
+                id={`members-${row._id}`}
+                place="top"
+                style={{
+                  backgroundColor: "#0b3554",
+                  color: "white",
+                  fontSize: "13px",
+                }}
+              />
+            </>
+          );
+        },
+      });
+      baseColumns.push({
+        name: "Aadhaar Number",
+        selector: (row) => {
+          return (
+            <>
+              <div
+                data-tooltip-id={`members-${row._id}`}
+                data-tooltip-content={row?.aadharNo} // ✅ full list in tooltip
+                className="truncate max-w-[180px] cursor-pointer"
+              >
+                {row?.aadharNo}
+              </div>
+              <Tooltip
+                id={`members-${row._id}`}
+                place="top"
+                style={{
+                  backgroundColor: "#0b3554",
+                  color: "white",
+                  fontSize: "13px",
+                }}
+              />
+            </>
+          );
+        },
+      });
+    }
+
+    if (type === "Health" || type === "") {
+      baseColumns.push({
+        name: "Members",
+        cell: (row) => {
+          const members = row?.members || [];
+          if (members.length === 0) return "-";
+
+          const displayText =
+            members.length > 2
+              ? `${members.slice(0, 2).join(", ")} +${members.length - 2} more`
+              : members.join(", ");
+
+          return (
+            <>
+              <div
+                data-tooltip-id={`members-${row._id}`}
+                data-tooltip-content={members.join(", ")} // ✅ full list in tooltip
+                className="truncate max-w-[180px] cursor-pointer"
+              >
+                {displayText}
+              </div>
+              <Tooltip
+                id={`members-${row._id}`}
+                place="top"
+                style={{
+                  backgroundColor: "#0b3554",
+                  color: "white",
+                  fontSize: "13px",
+                }}
+              />
+            </>
+          );
+        },
+      });
+    }
+
+    // Inquiry Date
+    baseColumns.push({
       name: "InquiryDate",
       selector: (row) => moment(row.createdAt).format("DD-MM-YYYY"),
-    },
-    {
+    });
+
+    // Action
+    baseColumns.push({
       name: "Action",
       cell: (row) => (
-        <div
-          onClick={() => handleDelete([row._id])}
-          className="cursor-pointer" // pass array with single ID
-        >
+        <div onClick={() => handleDelete([row._id])} className="cursor-pointer">
           <Trash2 size={20} color="red" />
         </div>
       ),
-    },
-  ];
+    });
+
+    return baseColumns;
+  };
 
   // Handle selection
   const handleSelectedRowsChange = (state) => {
@@ -211,37 +285,52 @@ const AdminTable = () => {
   };
 
   const exportClick = async () => {
-    const res = await axios(`${import.meta.env.VITE_API_URL}/users/searchall`);
+    const res = await axios(
+      `${
+        import.meta.env.VITE_API_URL
+      }/users/searchall?insuranceType=${activeTab}`
+    );
     generateExcel(res?.data?.data);
   };
 
   const generateExcel = (data) => {
-    // Define Excel headers
-    const headerAry = [
-      "Name",
-      "Email",
-      "Phone No",
-      "Insurance Type",
-      "Members",
-      "Created At",
-    ];
+    if (!data || data.length === 0) return;
 
-    // Format and map data
-    const expData = data?.map((cDetails) => ({
-      Name: cDetails?.name || "",
-      Email: cDetails?.email || "",
-      "Phone No": cDetails?.phoneNo || "",
-      "Insurance Type": cDetails?.insuranceType || "",
-      Members: Array.isArray(cDetails?.members)
-        ? cDetails.members.join(", ")
-        : "",
-      "Created At": cDetails?.createdAt
-        ? new Date(cDetails.createdAt).toLocaleString()
-        : "",
-    }));
+    // 1️⃣ Collect all unique keys from all objects
+    const allKeys = Array.from(
+      new Set(data.flatMap((item) => Object.keys(item)))
+    );
 
-    // Export to Excel
-    exportToExcel(expData, "Customer_Inquiry", headerAry);
+    // Optional: Keys you want to exclude
+    const excludeKeys = ["_id", "__v", "isDeleted", "updatedAt"];
+
+    const headers = allKeys.filter((key) => !excludeKeys.includes(key));
+
+    // 2️⃣ Map data according to dynamic headers
+    const formattedData = data.map((item) => {
+      const row = {};
+
+      headers.forEach((key) => {
+        let value = item[key];
+
+        // Special handling for members array
+        if (Array.isArray(value)) {
+          value = value.join(", ");
+        }
+
+        // Format date
+        if (key.toLowerCase().includes("created") && value) {
+          value = new Date(value).toLocaleString();
+        }
+
+        row[key] = value ? String(value) : "-";
+      });
+
+      return row;
+    });
+
+    // 3️⃣ Export to Excel
+    exportToExcel(formattedData, "Customer_Inquiry", headers);
   };
 
   return (
@@ -300,7 +389,7 @@ const AdminTable = () => {
         {/* Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <DataTable
-            columns={columns}
+            columns={getColumns(activeTab)}
             data={users}
             progressPending={pending}
             pagination

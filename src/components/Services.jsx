@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PartnersSection from "./PartnersSection.jsx";
 import { useSelector } from "react-redux";
 import { filterSystemData } from "../helper/index.jsx";
+import About from "./About.jsx";
 
 // At the bottom of your JSX return:
 <PartnersSection />;
@@ -91,6 +92,9 @@ export default function Services() {
         })}
       </div>
 
+      <section id="about">
+        <About />
+      </section>
       {/* Insurance Section */}
       <div className="py-16">
         <h2 className="text-4xl font-bold text-[#0b3554] mb-4">

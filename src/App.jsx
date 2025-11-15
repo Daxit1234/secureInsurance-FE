@@ -33,6 +33,7 @@ import SystemSetup from "./components/admin/SystemSetup.jsx";
 import { getSystemSetupData } from "./redux/actions/system.js";
 import { useDispatch, useSelector } from "react-redux";
 import FullPageLoader from "./common/pageLoader.jsx";
+import WhatsappBot from "./common/WhatsappBot.jsx";
 
 function ProtectedRoute({ children }) {
   const isAdmin = sessionStorage.getItem("admin");
@@ -59,9 +60,6 @@ function App() {
                 <main>
                   <section id="home">
                     <Hero />
-                  </section>
-                  <section id="about">
-                    <About />
                   </section>
                   <section id="services">
                     <Services />
@@ -116,6 +114,7 @@ function App() {
           <Route path="/PersonalLoan" element={<PersonalLoan />} />
         </Routes>
       </Router>
+      <WhatsappBot />
     </>
   );
 }

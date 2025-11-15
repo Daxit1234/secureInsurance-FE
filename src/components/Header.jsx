@@ -19,26 +19,25 @@ const Header = () => {
   }, [location, scrollToId]);
 
   const handleNavClick = (id) => {
-  if (location.pathname === "/") {
-    // already home → scroll directly
-    const element = document.getElementById(id);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
-  } else {
-    // navigate home first, then scroll
-    navigate("/", { state: { scrollTo: id } });
-  }
-};
+    if (location.pathname === "/") {
+      // already home → scroll directly
+      const element = document.getElementById(id);
+      if (element) element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // navigate home first, then scroll
+      navigate("/", { state: { scrollTo: id } });
+    }
+  };
 
-// inside useEffect
-useEffect(() => {
-  if (location.state && location.state.scrollTo) {
-    const element = document.getElementById(location.state.scrollTo);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
-    // clear state to prevent repeated scroll
-    navigate(location.pathname, { replace: true, state: {} });
-  }
-}, [location]);
-
+  // inside useEffect
+  useEffect(() => {
+    if (location.state && location.state.scrollTo) {
+      const element = document.getElementById(location.state.scrollTo);
+      if (element) element.scrollIntoView({ behavior: "smooth" });
+      // clear state to prevent repeated scroll
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location]);
 
   return (
     <>
@@ -52,7 +51,7 @@ useEffect(() => {
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="font-bold text-xl sm:text-2xl">SECURE INVEST</span>
+          {/* <span className="font-bold text-xl sm:text-2xl">SECURE INVEST</span> */}
         </div>
 
         {/* --- Desktop Navigation --- */}
@@ -82,7 +81,7 @@ useEffect(() => {
             Contact
           </button>
         </nav>
-
+        <div></div>
         {/* --- Mobile Menu Button --- */}
         <button
           className="md:hidden flex items-center justify-center w-11 h-11 border rounded-full hover:bg-gray-200 transition"

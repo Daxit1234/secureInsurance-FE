@@ -50,7 +50,9 @@ const FamilyHealth = () => {
   // ✅ Navigate to Health.jsx page
   const handleContinue = () => {
     navigate(
-      "/health?gender=" + gender + "&members=" + selectedMembers.join(",")
+      `/health?insuranceType=Family%20Health%20Insurance&gender=${encodeURIComponent(
+        gender
+      )}&members=${encodeURIComponent(selectedMembers.join(","))}`
     );
   };
 

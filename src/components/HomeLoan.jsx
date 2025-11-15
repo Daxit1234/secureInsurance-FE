@@ -15,7 +15,7 @@ export default function HomeLoan() {
           loan plans. Enjoy quick approvals, low interest rates, and easy
           repayment options.
         </p>
-        <ContactForm fields={["fullName", "contact", "email"]} />
+        <ContactForm fields={["fullName", "contact", "email","loanAmount"]} />
       </div>
     </div>
   );

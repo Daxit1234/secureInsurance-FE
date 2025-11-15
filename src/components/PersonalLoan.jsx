@@ -17,7 +17,17 @@ export default function PersonalLoan() {
           options.
         </p>
 
-        <ContactForm />
+        <ContactForm
+          fields={[
+            "fullName",
+            "dob",
+            "email",
+            "gender",
+            "contact",
+            "panNo",
+            "aadharNo",
+          ]}
+        />
       </div>
     </div>
   );

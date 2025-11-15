@@ -17,7 +17,7 @@ export default function TwoWheeler() {
           insurance. Stay worry-free on every journey with coverage for
           accidents, theft, and damages.
         </p>
-        <ContactForm fields={["fullName", "contact", "email"]} />
+        <ContactForm fields={["fullName", "contact", "email","vehicleNo"]} />
       </div>
     </div>
   );
