@@ -24,6 +24,7 @@ export default function PersonalLoan() {
             "email",
             "gender",
             "contact",
+            "loanAmount",
             "panNo",
             "aadharNo",
           ]}

@@ -7,7 +7,16 @@ import { Tooltip } from "react-tooltip";
 import { Trash2 } from "feather-icons-react";
 import Sidebar from "./Sidebar";
 import { exportToExcel } from "../../helper";
-import { Nav, NavItem, NavLink, Button } from "reactstrap";
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  Button,
+  Offcanvas,
+  OffcanvasHeader,
+  OffcanvasBody,
+} from "reactstrap";
+import OfflineInquiry from "./OfflineInquiry";
 
 const AdminTable = () => {
   const [users, setUsers] = useState([]);
@@ -20,6 +29,8 @@ const AdminTable = () => {
   const [sortField, setSortField] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const [activeTab, setActiveTab] = useState("All");
+  const [editId, setEditId] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const tabs = [
     { key: "All", value: "" },
@@ -65,6 +76,14 @@ const AdminTable = () => {
     }
   };
 
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+  };
+
+  // const handleEdit = (item) => {
+  //   setEditId(item?._id);
+  //   setDrawerOpen(true);
+  // };
   useEffect(() => {
     fetchUsers(page, perPage, search, sortField, sortOrder, activeTab);
   }, [page, perPage, search, sortField, sortOrder, activeTab]);
@@ -146,9 +165,9 @@ const AdminTable = () => {
       });
     }
 
-    if (type === "HomeLoan" || type === "") {
+    if (type === "HomeLoan" || type === "PersonalLoan" || type === "") {
       baseColumns.push({
-        name: "amount",
+        name: "Loan Amount",
         selector: (row) => row.loanAmount || "-",
       });
     }
@@ -294,45 +313,53 @@ const AdminTable = () => {
   };
 
   const generateExcel = (data) => {
-    if (!data || data.length === 0) return;
+    // Define Excel headers
+    const headerAry = ["Name", "Email", "Phone No", "Insurance Type"];
 
-    // 1️⃣ Collect all unique keys from all objects
-    const allKeys = Array.from(
-      new Set(data.flatMap((item) => Object.keys(item)))
-    );
+    if (
+      activeTab === "CarInsurance" ||
+      activeTab === "TwoWheeler" ||
+      activeTab === ""
+    ) {
+      headerAry.push("Vehicle No");
+    }
+    if (
+      activeTab === "HomeLoan" ||
+      activeTab === "PersonalLoan" ||
+      activeTab === ""
+    ) {
+      headerAry.push("Loan Amount");
+    }
 
-    // Optional: Keys you want to exclude
-    const excludeKeys = ["_id", "__v", "isDeleted", "updatedAt"];
+    if (activeTab === "PersonalLoan" || activeTab === "") {
+      headerAry.push("PanCard Number");
+      headerAry.push("Aadhaar Number");
+    }
+    if (activeTab === "Health" || activeTab === "") {
+      headerAry.push("Members");
+    }
+    headerAry.push("InquiryDate");
+    // Format and map data
+    const expData = data?.map((cDetails) => ({
+      Name: cDetails?.name || "",
+      Email: cDetails?.email || "",
+      "Phone No": cDetails?.phoneNo || "",
+      "Insurance Type": cDetails?.insuranceType || "",
+      "Vehicle No": cDetails?.vehicleNo || "",
+      "Loan Amount": cDetails?.loanAmount || "",
+      "PanCard Number": cDetails?.panNo || "",
+      "Aadhaar Number": String(cDetails?.aadharNo) || "",
+      Members: Array.isArray(cDetails?.members)
+        ? cDetails.members.join(", ")
+        : "",
+      InquiryDate: cDetails?.createdAt
+        ? new Date(cDetails.createdAt).toLocaleString()
+        : "",
+    }));
 
-    const headers = allKeys.filter((key) => !excludeKeys.includes(key));
-
-    // 2️⃣ Map data according to dynamic headers
-    const formattedData = data.map((item) => {
-      const row = {};
-
-      headers.forEach((key) => {
-        let value = item[key];
-
-        // Special handling for members array
-        if (Array.isArray(value)) {
-          value = value.join(", ");
-        }
-
-        // Format date
-        if (key.toLowerCase().includes("created") && value) {
-          value = new Date(value).toLocaleString();
-        }
-
-        row[key] = value ? String(value) : "-";
-      });
-
-      return row;
-    });
-
-    // 3️⃣ Export to Excel
-    exportToExcel(formattedData, "Customer_Inquiry", headers);
+    // Export to Excel
+    exportToExcel(expData, "Customer_Inquiry", headerAry);
   };
-
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar - 30% width on desktop, full width on small screens */}
@@ -344,12 +371,20 @@ const AdminTable = () => {
       <div className="w-full vh-100 md:w-2/2 p-6 overflow-y-auto">
         <h3 className="text-2xl font-semibold mb-4">Customer Inquiry</h3>
 
-        <button
-          className="mb-4 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded"
-          onClick={exportClick}
-        >
-          Export to Excel
-        </button>
+        <div className="flex">
+          <button
+            className="mb-4 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded"
+            onClick={exportClick}
+          >
+            Export to Excel
+          </button>
+          <button
+            className="mb-4 ml-3 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded"
+            onClick={() => setDrawerOpen(true)}
+          >
+            Add
+          </button>
+        </div>
 
         <Nav pills className="flex-wrap gap-2">
           {tabs.map((tab) => (
@@ -411,6 +446,19 @@ const AdminTable = () => {
           />
         </div>
       </div>
+      <Offcanvas
+        isOpen={drawerOpen}
+        toggle={closeDrawer}
+        className="w-50"
+        direction="end"
+      >
+        <OffcanvasHeader toggle={closeDrawer}>
+          {editId ? "Edit" : "Add"}
+        </OffcanvasHeader>
+        <OffcanvasBody>
+          <OfflineInquiry closeDrawer={closeDrawer} />
+        </OffcanvasBody>
+      </Offcanvas>
     </div>
   );
 };
