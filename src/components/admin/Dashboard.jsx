@@ -103,7 +103,7 @@ function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
           <SummaryCard title="Today's Total Leads" value={overall.today} />
           <SummaryCard title="Last 7 Total Leads" value={overall.last7} />
-          <SummaryCard title="Total Total Leads" value={overall.total} />
+          <SummaryCard title="Total Leads" value={overall.total} />
         </div>
 
         {/* INSURANCE TYPE WISE ROWS */}
