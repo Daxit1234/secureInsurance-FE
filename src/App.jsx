@@ -34,6 +34,7 @@ import { getSystemSetupData } from "./redux/actions/system.js";
 import { useDispatch, useSelector } from "react-redux";
 import FullPageLoader from "./common/pageLoader.jsx";
 import WhatsappBot from "./common/WhatsappBot.jsx";
+import Dashboard from "./components/admin/Dashboard.jsx";
 
 function ProtectedRoute({ children }) {
   const isAdmin = sessionStorage.getItem("admin");
@@ -86,6 +87,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <SystemSetup />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
               </ProtectedRoute>
             }
           />

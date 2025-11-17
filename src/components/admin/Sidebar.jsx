@@ -8,6 +8,7 @@ export default function Sidebar() {
     const pathToKey = {
         "/admin/inquiry": "inquiry",
         "/admin/system-setup": "system-setup",
+        "/admin/dashboard": "dashboard",
     };
 
     const currentKey = pathToKey[location.pathname] || "inquiry";
@@ -21,6 +22,11 @@ export default function Sidebar() {
                 className="vh-100 p-3"
             >
                 <h4 className="text-center mb-4">Admin Panel</h4>
+                <Menu.Item key="dashboard">
+                    <Link to="/admin/dashboard" className="text-decoration-none">
+                        <span>Dashboard</span>
+                    </Link>
+                </Menu.Item>
                 <Menu.Item key="inquiry">
                     <Link to="/admin/inquiry" className="text-decoration-none">
                         <span>Customer Inquiry</span>

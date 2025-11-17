@@ -33,7 +33,7 @@ export default function AdminLogin() {
 
       if (res.ok) {
         sessionStorage.setItem("admin", "true");
-        navigate("/admin/inquiry");
+        navigate("/admin/dashboard");
       } else {
         alert("Invalid username or password");
       }
