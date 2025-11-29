@@ -17,6 +17,7 @@ import {
   OffcanvasBody,
 } from "reactstrap";
 import OfflineInquiry from "./OfflineInquiry";
+import { useParams } from "react-router-dom";
 
 const AdminTable = () => {
   const [users, setUsers] = useState([]);
@@ -31,7 +32,11 @@ const AdminTable = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [editId, setEditId] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const query = new URLSearchParams(window.location.search).get("type");
 
+  useEffect(() => {
+    setActiveTab(query);
+  }, query);
   const tabs = [
     { key: "All", value: "" },
     { key: "Term Life Insurance", value: "TermLife" },

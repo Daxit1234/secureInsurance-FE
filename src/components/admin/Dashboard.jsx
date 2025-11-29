@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-  const insuranceType = [
-    { key: "Term Life Insurance", value: "TermLife" },
-    { key: "Health Insurance", value: "Health" },
-    { key: "Investment Plans", value: "InvestmentPlans" },
-    { key: "Car Insurance", value: "CarInsurance" },
-    { key: "2 Wheeler Insurance", value: "TwoWheeler" },
-    // { key: "Family Health Insurance", value: "FamilyHealth" },
-    { key: "Travel Insurance", value: "TravelInsurance" },
-    { key: "Mortgage Loan", value: "MortgageLoan" },
-    { key: "Term Plan with Return", value: "TermPlanwithReturns" },
-    { key: "Guaranteed Return Plan", value: "GuaranteedReturnPlans" },
-    { key: "Child Savings Plan", value: "ChildSavingsPlans" },
-    { key: "Retirement Plan", value: "RetirementPlans" },
-    { key: "Home Loan", value: "HomeLoan" },
-    { key: "Personal Loan", value: "PersonalLoan" },
-  ];
+const insuranceType = [
+  { key: "Term Life Insurance", value: "TermLife" },
+  { key: "Health Insurance", value: "Health" },
+  { key: "Investment Plans", value: "InvestmentPlans" },
+  { key: "Car Insurance", value: "CarInsurance" },
+  { key: "2 Wheeler Insurance", value: "TwoWheeler" },
+  // { key: "Family Health Insurance", value: "FamilyHealth" },
+  { key: "Travel Insurance", value: "TravelInsurance" },
+  { key: "Mortgage Loan", value: "MortgageLoan" },
+  { key: "Term Plan with Return", value: "TermPlanwithReturns" },
+  { key: "Guaranteed Return Plan", value: "GuaranteedReturnPlans" },
+  { key: "Child Savings Plan", value: "ChildSavingsPlans" },
+  { key: "Retirement Plan", value: "RetirementPlans" },
+  { key: "Home Loan", value: "HomeLoan" },
+  { key: "Personal Loan", value: "PersonalLoan" },
+];
 
-const SummaryCard = ({ title, value }) => {
+const SummaryCard = ({ title, value, type }) => {
+  const navigate = useNavigate();
   return (
-    <div className="bg-white p-6 rounded-md shadow-md text-center">
+    <div
+      onClick={() => navigate(`/admin/inquiry?type=${type}`)}
+      className="bg-white p-6 rounded-md shadow-md text-center"
+    >
       <h5 className="text-md font-semibold mb-2">{title}</h5>
       <p className="text-3xl font-bold text-blue-600">{value}</p>
     </div>
@@ -73,20 +78,22 @@ function Dashboard() {
 
     const typeStats = {};
 
-    insuranceType.map((type) => type.value).forEach((type) => {
-      const filtered = leads.filter((l) => l.insuranceType === type);
+    insuranceType
+      .map((type) => type.value)
+      .forEach((type) => {
+        const filtered = leads.filter((l) => l.insuranceType === type);
 
-      typeStats[type] = {
-        today: filtered.filter(
-          (l) => new Date(l.createdAt).toDateString() === now.toDateString()
-        ).length,
-        last7: filtered.filter((l) => new Date(l.createdAt) >= sevenDaysAgo)
-          .length,
-        total: filtered.length,
-      };
-    });
+        typeStats[type] = {
+          today: filtered.filter(
+            (l) => new Date(l.createdAt).toDateString() === now.toDateString()
+          ).length,
+          last7: filtered.filter((l) => new Date(l.createdAt) >= sevenDaysAgo)
+            .length,
+          total: filtered.length,
+        };
+      });
 
-    console.log(typeStats)
+    console.log(typeStats);
     setByType(typeStats);
   };
 
@@ -101,9 +108,21 @@ function Dashboard() {
         {/* OVERALL ROW */}
         <h1 className="text-2xl font-semibold mb-3">Over All Leads</h1>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
-          <SummaryCard title="Today's Total Leads" value={overall.today} />
-          <SummaryCard title="Last 7 Total Leads" value={overall.last7} />
-          <SummaryCard title="Total Total Leads" value={overall.total} />
+          <SummaryCard
+            title="Today's Total Leads"
+            value={overall.today}
+            type={""}
+          />
+          <SummaryCard
+            title="Last 7 Total Leads"
+            value={overall.last7}
+            type={""}
+          />
+          <SummaryCard
+            title="Total Total Leads"
+            value={overall.total}
+            type={""}
+          />
         </div>
 
         {/* INSURANCE TYPE WISE ROWS */}
@@ -115,14 +134,17 @@ function Dashboard() {
               <SummaryCard
                 title={`Today's Leads`}
                 value={byType?.[type.value]?.today || 0}
+                type={type.value}
               />
               <SummaryCard
                 title={`Last 7 Days Leads`}
                 value={byType?.[type.value]?.last7 || 0}
+                type={type.value}
               />
               <SummaryCard
                 title={`Total Leads`}
                 value={byType?.[type.value]?.total || 0}
+                type={type.value}
               />
             </div>
           </div>
