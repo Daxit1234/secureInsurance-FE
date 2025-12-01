@@ -53,6 +53,8 @@ const AdminTable = () => {
     { key: "Retirement Plan", value: "RetirementPlans" },
     { key: "Home Loan", value: "HomeLoan" },
     { key: "Personal Loan", value: "PersonalLoan" },
+    { key: "SIP", value: "SIP" },
+    { key: "Mutual Funds", value: "MutualFunds" },
   ];
 
   // Fetch Data

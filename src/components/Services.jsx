@@ -36,6 +36,8 @@ export default function Services() {
     "Retirement Plans": "/RetirementPlans",
     "Home Loan": "/HomeLoan",
     "Personal Loan": "/PersonalLoan",
+    "SIP":"/SIP",
+    "Mutual Funds":"/MutualFunds"
   };
   useEffect(() => {
     if (systemData.length > 0 && serviceList.length === 0) {

@@ -35,6 +35,8 @@ import { useDispatch, useSelector } from "react-redux";
 import FullPageLoader from "./common/pageLoader.jsx";
 import WhatsappBot from "./common/WhatsappBot.jsx";
 import Dashboard from "./components/admin/Dashboard.jsx";
+import SIP from "./components/SIP.jsx";
+import MutualFunds from "./components/MutualFunds.jsx";
 
 function ProtectedRoute({ children }) {
   const isAdmin = sessionStorage.getItem("admin");
@@ -121,6 +123,8 @@ function App() {
           <Route path="/RetirementPlans" element={<RetirementPlans />} />
           <Route path="/HomeLoan" element={<HomeLoan />} />
           <Route path="/PersonalLoan" element={<PersonalLoan />} />
+          <Route path="/SIP" element={<SIP />} />
+          <Route path="/MutualFunds" element={<MutualFunds />} />
         </Routes>
       </Router>
       <WhatsappBot />
